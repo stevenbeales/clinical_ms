@@ -1,62 +1,43 @@
-Clinical MS
-===========
+== Clinical MS Ruby Documentation
 
-Installation instructions (*nix based OS preferred for dev)
-=========================
+==== Installation instructions (*nix based OS preferred for dev)
 
-1. use git link - git@github.com:sjburji/clinical_ms.git
-	or 
-	unzip from here - https://github.com/sjburji/clinical_ms/archive/master.zip
+* Source links
+    git clone git@github.com:sjburji/clinical_ms.git
+  - *or* unzip from here - https://github.com/sjburji/clinical_ms/archive/master.zip
 
-2. The working folder should be clinical_ms-master
+* Database connection settings is at clinical_ms/config/database.yml
+  - Currently it uses mysql with "root" user and "" password
+  - Dev db is clinical_ms, update username and db as necessary for "development"
 
-3. clinical_ms/config/database.yml is the database connection settings
-	- Currently it uses mysql with "root" user and "" passwaord (yes no password)
-	- dev db is clinical_ms
-	- update username and / db as necessary for "development"
+* On the command line
+    bundle install
+    rake db:create
+    rake db:migrate
 
-4. On the command line $
-	- if using rvm
-	 		- rvm --rvmrc --create 1.9.3@clinical
-	 			if ruby is not installed. then
-	 				- rvm install ruby-1.9.3
-	 	- to refresh session for rvm 
-			- cd ..
-			- cd clinical_ms-master
-	- bundle install
-	- rake db:create
-	- rake db:migrate
+* To run the dev server at command line
+    rails server [-p port_no]  # default is 3000
+  - http://localhost:port_no	 (in browser)
 
-5. To run the dev server at command line $
-	- rails s
+* Signup to setup an account as admin@example.com and password - this sets up admin user
+  - Add practitioners
+  - Add staff
+  - Add md
+  - Add patients
 
+* default password is set to - "clinical_ms"
+  - login to user other than admin requires, user *email* as mentioned during setup
+  - password as "clinical_ms"
 
-6. To run the web application in the browser - use http://localhost:3000
+* Solr setup
+    rake sunspot:solr:reindex  # indexing for data
+    rake sunspot:solr:start    # this is needed everytime you start the web server for search to work
 
-7. Signup to setup an account as admin@example.com and password - this sets up admin user
-		- Add practitioners
-		- Add staff
-		- Add md
-		- Add patients
+* Running the specs - Rspec has been setup with simplecov-rcov styling in HTML format
+    sh spec/bootstrap_test.sh  # spec/bootstrap_test script is required for seeding before tests
+    rspec spec
 
-8. default password is set to - "clinical_ms"
-		- login to user other than admin requires
-			- user email as mentioned during setup
-			- password as clinical_ms
+  Specs have been deliberately left out of the scope and for the developer - to implement and enhance as required.
 
-9. Solr setup
-	- indexing for data requires
-		- rake sunspot:solr:reindex
-	- rake sunspot:solr:start (this is needed everytime u start the web server for search to work)
-
-10. Running the specs
-		Rspec has been setup with simplecov-rcov styling in HTML format
-		- Due to data dependencies, spec/bootstrap_test has been included and is required to be run before tests
-			- sh spec/bootstrap_test.sh
-		- rspec spec
-
-		Specs have been deliberately left out of the scope and for the developer - to implement and enhance as required.
-
-11. Deployment on production system is out of the scope of this document
-	- However I would recommend usage of gem "capistrano"
-	- https://help.github.com/articles/deploying-with-capistrano
+* Deployment on production system is out of the scope of this document
+  - However I would recommend usage of gem "capistrano" - https://help.github.com/articles/deploying-with-capistrano
