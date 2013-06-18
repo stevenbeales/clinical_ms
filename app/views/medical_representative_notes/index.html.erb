@@ -1,0 +1,59 @@
+<%- model_class = MedicalRepresentativeNote -%>
+<div class="page-header">
+  <h1>
+    Medical Rep Notes <small>for <%= @practitioner.name %></small>
+    <div class="pull-right">
+      <%= form_tag practitioner_medical_representative_notes_path(@practitioner), :method => :get do %>
+        <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+      <% end -%>
+    </div>
+  </h1>
+</div>
+
+<%= will_paginate @medical_representative_notes %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th>Representative</th>
+      <th><%= model_class.human_attribute_name(:notes) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @medical_representative_notes.each do |medical_representative_note| %>
+      <tr>
+        <td><%= link_to medical_representative_note.id, practitioner_medical_representative_note_path(@practitioner, medical_representative_note) %></td>
+        <td>
+          <%= medical_representative_note.rep_name %>
+          <br/>
+          from <strong><%= medical_representative_note.rep_company %></strong> Company
+          <br/>
+          (P) : <%= medical_representative_note.rep_phone %>
+        </td>
+        <td>
+          <ul>
+            <% medical_representative_note.notes.split(/$/).each do |note| %>
+              <li><%= note %></li>
+            <% end -%>
+          </ul>
+        </td>
+        <td><%=l medical_representative_note.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_practitioner_medical_representative_note_path(@practitioner, medical_representative_note), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      practitioner_medical_representative_note_path(@practitioner, medical_representative_note),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_practitioner_medical_representative_note_path(@practitioner),
+            :class => 'btn btn-primary' %>

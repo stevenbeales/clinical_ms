@@ -1,0 +1,7 @@
+/tmp/*
+/log/*
+.ruby-gemset
+.ruby-version
+/solr/*
+/coverage/*
+.rspec

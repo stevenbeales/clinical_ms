@@ -1,0 +1,48 @@
+<%- model_class = PurchaseOrder -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Items</dt>
+  <dd>
+    <table class="table table-condensed table-bordered">
+      <thead>
+        <th>Inventory</th>
+        <th>Supplier</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+      </thead>
+      <tbody>
+        <% @purchase_order.purchase_order_items.each do |item| %>
+          <tr>
+            <td><%= item.purchase_inventory.name %></td>
+            <td><%= item.supplier.name %></td>
+            <td><%= item.quantity %></td>
+            <td><%= item.cost %></td>            
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:quantity) %>:</strong></dt>
+  <dd><%= @purchase_order.quantity %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
+  <dd><%= @purchase_order.amount %></dd>
+  <dt><strong>Creator:</strong></dt>
+  <dd><%= @purchase_order.creator.name %></dd>
+  <dt><strong>Modifier:</strong></dt>
+  <dd><%= @purchase_order.modifier.name rescue '-' %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              purchase_orders_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_purchase_order_path(@purchase_order), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              purchase_order_path(@purchase_order),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

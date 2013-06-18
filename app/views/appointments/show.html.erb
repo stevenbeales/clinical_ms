@@ -1,0 +1,45 @@
+<%- model_class = Appointment -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
+  <dd><%= decorated_status(@appointment) %> 
+    <small>
+      <%= "( " + @appointment.cancellation_reason.name + " )" if @appointment.status == "Cancelled" %>
+    </small>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:patient_id) %>:</strong></dt>
+  <dd><%= @appointment.patient.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:department_id) %>:</strong></dt>
+  <dd><%= @appointment.department.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:practitioner_id) %>:</strong></dt>
+  <dd><%= @appointment.practitioner.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:appointment_date) %>:</strong></dt>
+  <dd><%= @appointment.appointment_date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:from_time) %>:</strong></dt>
+  <dd><%= @appointment.from_time %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:to_time) %>:</strong></dt>
+  <dd><%= @appointment.to_time %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:asset_item) %>:</strong></dt>
+  <dd><%= @appointment.asset_item.decorated_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
+  <dd><%= @appointment.amount %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:created_by) %>:</strong></dt>
+  <dd><%= @appointment.creator.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:modified_by) %>:</strong></dt>
+  <dd><%= @appointment.modifier.name rescue '-' %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              patient_appointments_path(@appointment.patient), :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_patient_appointment_path(:patient_id => @appointment.patient.id, :id => @appointment.id), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              patient_appointment_path(@appointment.patient, @appointment),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

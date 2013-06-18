@@ -1,0 +1,31 @@
+<%- model_class = Vital -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human %>
+    <small>
+      for <%= @vital.patient.name %>'s Appointment on <%= @appointment.appointment_date.strftime("%d %B %Y") %>
+    </small>
+  </h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:appointment_id) %>:</strong></dt>
+  <dd><%= link_to @vital.appointment_id, patient_appointment_path(@appointment.patient, @appointment) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:height) %>:</strong></dt>
+  <dd><%= @vital.height %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:weight) %>:</strong></dt>
+  <dd><%= @vital.weight %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:blood_pressure) %>:</strong></dt>
+  <dd><%= @vital.blood_pressure %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:sugar_level) %>:</strong></dt>
+  <dd><%= @vital.sugar_level %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:temperature) %>:</strong></dt>
+  <dd><%= @vital.temperature %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              patient_appointments_path(@appointment.patient), :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_patient_appointment_vital_path(@appointment.patient, @appointment, @vital), :class => 'btn' %>
+</div>

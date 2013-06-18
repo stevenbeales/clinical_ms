@@ -1,0 +1,26 @@
+<%- model_class = UserProfile -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => "Profile" %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:email) %>:</strong></dt>
+  <dd><%= @user_profile.user.email %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @user_profile.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:gender) %>:</strong></dt>
+  <dd><%= @user_profile.gender %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:date_of_birth) %>:</strong></dt>
+  <dd><%= @user_profile.date_of_birth %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:phone) %>:</strong></dt>
+  <dd><%= @user_profile.phone %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:address) %>:</strong></dt>
+  <dd><%= @user_profile.address %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              dashboard_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_user_profile_path(@user_profile), :class => 'btn' %>
+</div>

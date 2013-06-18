@@ -1,0 +1,289 @@
+<h3>
+	Dashboard
+	<div class="pull-right">
+		<small>
+			<%- profile_path = current_user.user_profile.nil? ? new_user_profile_path : 
+          user_profile_path(current_user.user_profile.id) -%>
+      Hi, <%= link_to "#{ current_user.name rescue 'Profile' }", profile_path %>
+		</small>
+	</div>
+</h3>
+<hr/>
+
+<div class="icon_div_links">
+	<% if current_user.admin? %>
+		<%= link_to managing_directors_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-user icon-4x"></i>
+					<br/>
+					Managing Director
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to clinics_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-hospital icon-4x"></i>
+					<br/>
+					Clinic
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to departments_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-sitemap icon-4x"></i>
+					<br/>
+					Departments
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to assets_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-briefcase icon-4x"></i>
+					<br/>
+					Clinic Assets
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to asset_items_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-th-list icon-4x"></i>
+					<br/>
+					Asset Items
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to cancellation_reasons_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-th-list icon-4x"></i>
+					<br/>
+					Cancellation Reasons
+				</center>
+			</div>
+		<% end -%>
+		
+		<%= link_to staffs_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-user icon-4x"></i>
+					<br/>
+					Staff
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to patients_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-plus-sign-alt icon-4x"></i>
+					<br/>
+					Patients
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to practitioners_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-user-md icon-4x"></i>
+					<br/>
+					Practitioners
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to purchase_inventories_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-cogs icon-4x"></i>
+					<br/>
+					Purchase Inventory
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to suppliers_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-user icon-4x"></i>
+					<br/>
+					Suppliers
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to purchase_orders_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-cog icon-4x"></i>
+					<br/>
+					Purchase Orders
+				</center>
+			</div>
+		<% end -%>
+
+	<% elsif current_user.patient? %>
+		<div class="row-fluid">
+			<div class="span5 thumbnail box">
+				<h4>
+					My Appointments
+					<p class="pull-right">
+						<%= link_to "View all", patient_appointments_path(current_user), { :class => "btn btn-primary" } %>
+					</p>
+				</h4>
+				<%= render :partial => "appointments/patient_appointments" %>
+			</div>
+
+			<div class="span5 thumbnail box">
+				<h4>
+					Follow Up
+					<p class="pull-right">
+						<%= link_to "View all", patient_patient_histories_path(current_user), { :class => "btn btn-primary" } %>
+					</p>
+				</h4>
+				
+				<hr/>
+				<%= render :partial => "patients/histories" %>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5 thumbnail box">
+				<h4>
+					Payment History
+					<p class="pull-right">
+						<%= link_to "View all", patient_payments_path(current_user), { :class => "btn btn-primary" } %>
+					</p>
+				</h4>
+
+				<hr/>
+				<div>
+					<center>
+						<p class="label label-important pull-left">Dues</p>
+						<p style="font-size: 64px;"><%= @patient.dues %></p>
+					</center>
+				</div>
+				<hr/>
+
+				<%= render :partial => "payments/patient_payments" %>
+			</div>
+		</div>
+
+	<% elsif current_user.practitioner? %>
+		<div class="span5 thumbnail box">
+			<h4>
+				My Appointments
+				<p class="pull-right">
+					<%= link_to "View all", practitioner_appointments_path(current_user), { :class => "btn btn-primary" } %>
+				</p>
+			</h4>
+			<%= render :partial => "appointments/practitioner_appointments" %>
+		</div>
+
+		<%= link_to patients_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-plus-sign-alt icon-4x"></i>
+					<br/>
+					Patients
+				</center>
+			</div>
+		<% end -%>
+		
+		<%= link_to practitioner_medical_representative_notes_path(current_user), :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-suitcase icon-4x"></i>
+					<br/>
+					Medical Rep Notes
+				</center>
+			</div>
+		<% end -%>
+
+	<% elsif current_user.staff? %>
+		<%= link_to appointments_list_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<p style="font-size: 64px;"><%= @appointments.count %></p>
+					<br/>
+					Pending Appointments
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to patients_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-plus-sign-alt icon-4x"></i>
+					<br/>
+					Patients
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to payments_list_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-money icon-4x"></i>
+					<br/>
+					Payments
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to asset_items_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-th-list icon-4x"></i>
+					<br/>
+					Asset Items
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to purchase_inventories_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-cogs icon-4x"></i>
+					<br/>
+					Purchase Inventory
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to suppliers_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-user icon-4x"></i>
+					<br/>
+					Suppliers
+				</center>
+			</div>
+		<% end -%>
+
+		<%= link_to purchase_orders_path, :class => "icon_links" do %>
+			<div class="span2">
+				<center>
+					<i class="icon icon-cog icon-4x"></i>
+					<br/>
+					Purchase Orders
+				</center>
+			</div>
+		<% end -%>
+		
+	<% elsif current_user.managing_director? %>
+		TODO : This is left to developer's requirement
+	<% else %>
+		No data found.
+	<% end -%>
+</div>

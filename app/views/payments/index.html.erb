@@ -1,0 +1,102 @@
+<%- model_class = Payment -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small> for <%= @user.name %></small>
+  </h1>
+</div>
+
+<%= will_paginate(@payments) %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th><%= model_class.human_attribute_name(:paid_amount) %></th>
+      <th><%= model_class.human_attribute_name(:discount) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th>Items</th>
+      <th>Receipt</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payments.each do |payment| %>
+      <tr>
+        <% if params[:patient_id] %>
+          <td><%= link_to payment.id, patient_payment_path(:patient_id => params[:patient_id], :id => payment.id) %></td>
+        <% else %>
+          <td><%= link_to payment.id, supplier_payment_path(:supplier_id => params[:supplier_id], :id => payment.id) %></td>
+        <% end -%>
+        <td><%= payment.amount %></td>
+        <td><%= payment.paid_amount %></td>
+        <td><%= payment.discount %></td>
+        <td><%=l payment.created_at %></td>
+        <td><%= link_to "Items", "#", { :class => "item_link", :payment_id => payment.id } %></td>
+        <td><%= link_to "Receipt", print_receipt_path(:payment_id => payment.id), { :class => "item_receipt_link btn-small btn-primary", "target" => "_blank" } %></td>
+        <td>
+          <% if params[:patient_id] %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")), 
+              edit_patient_payment_path(:patient_id => params[:patient_id], :id => payment.id), 
+              :class => 'btn btn-mini' %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        patient_payment_path(:patient_id => params[:patient_id], :id => payment.id),
+                        :method => :delete,
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+          <% else %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")), 
+              edit_supplier_payment_path(:supplier_id => params[:supplier_id], :id => payment.id), 
+              :class => 'btn btn-mini' %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        supplier_payment_path(:supplier_id => params[:supplier_id], :id => payment.id),
+                        :method => :delete,
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+          <% end -%>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="7">
+          <div id="<%= payment.id.to_s + '_item_div' %>" style="display: none;">
+            <table class="table table-condensed table-bordered">
+              <thead>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Discount</th>
+                <th>Amount</th>
+              </thead>
+              <tbody>
+                <% payment.payment_items.each do |item| %>
+                  <tr>
+                    <td><%= item.transaction_id %></td>
+                    <td><%= item.transaction_type %></td>
+                    <td><%= item.transaction.date.strftime("%d %B %Y") %></td>
+                    <td><%= item.discount %></td>
+                    <td><%= item.amount %></td>
+                  </tr>
+                <% end -%>
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_patient_payment_path,
+            :class => 'btn btn-primary' if params[:patient_id] %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_supplier_payment_path,
+            :class => 'btn btn-primary' if params[:supplier_id] %>
+
+<%= javascript_tag :defer do %>
+  window.onload = function(){
+    $(".item_link").click(function(){
+      $("#" + $(this).attr("payment_id") + "_item_div").toggle();
+    });
+  }
+<% end -%>

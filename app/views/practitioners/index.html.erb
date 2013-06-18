@@ -1,0 +1,57 @@
+<%- model_class = Practitioner -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small>
+      <div class="pull-right">
+        <%= form_tag practitioners_path, :method => :get do %>
+          <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+        <% end -%>
+      </div>
+    </small>
+  </h1>
+</div>
+
+<%= will_paginate @practitioners %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th><%= model_class.human_attribute_name(:gender) %></th>
+      <th><%= model_class.human_attribute_name(:age) %></th>
+      <th><%= model_class.human_attribute_name(:phone) %></th>
+      <th><%= model_class.human_attribute_name(:department_id) %></th>
+      <th>Appointments</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @practitioners.each do |practitioner| %>
+      <tr>
+        <td><%= link_to practitioner.id, practitioner_path(practitioner) %></td>
+        <td><%= practitioner.name %></td>
+        <td><%= practitioner.email %></td>
+        <td><%= practitioner.gender %></td>
+        <td><%= practitioner.age %></td>
+        <td><%= practitioner.phone %></td>
+        <td><%= practitioner.department.name %></td>
+        <td><%= link_to "Appointments", practitioner_appointments_path(:practitioner_id => practitioner.id) %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_practitioner_path(practitioner), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      practitioner_path(practitioner),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_practitioner_path,
+            :class => 'btn btn-primary' %>

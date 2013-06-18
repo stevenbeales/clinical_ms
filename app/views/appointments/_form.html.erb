@@ -1,0 +1,178 @@
+<%= form_for [@patient, @appointment], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @appointment %>
+
+  <div class="control-group">
+    <%= f.label :patient_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :patient_id, [[@patient.name, @patient.id]], {}, { :disabled => true } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :department_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :department_id, options_for_select(Department.all.map {|d| [d.name, d.id]}), { :prompt => "Select department" } %>
+    </div>
+  </div>
+
+  <div class="pull-right">
+    <a id="suggestions_by_department_link" href="#myModal" role="button" 
+      class="btn-small btn-info" data-toggle="modal">Suggest Practitioner</a>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :practitioner_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :practitioner_id, (options_for_select(Department.find(@appointment.department_id).practitioners.map {|p| [p.name, p.id]}, @appointment.practitioner_id) rescue []), { :prompt => "Select department first" } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :appointment_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :appointment_date, { :value => "#{ f.object.appointment_date.nil? ? Date.today : f.object.appointment_date }", "data-behaviour" => "datepicker" } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :from_time, :class => 'control-label' %>
+    <div class="controls">
+      <div class="input-append bootstrap-timepicker">
+        <%= f.text_field :from_time, { :class => "input-small" } %>
+        <span class="add-on"><i class="icon-time"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :to_time, :class => 'control-label' %>
+    <div class="controls">
+      <div class="input-append bootstrap-timepicker">
+        <%= f.text_field :to_time, { :class => "input-small" } %>
+        <span class="add-on"><i class="icon-time"></i></span>
+      </div>
+    </div>  
+  </div>
+
+  <div class="pull-right">
+    <a id="suggestions_by_asset_item_link" href="#myModal" role="button" 
+      class="btn-small btn-info" data-toggle="modal">Suggest Asset</a>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :asset_item_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :asset_item_id, AssetItem.all.map { |item| [item.decorated_name, item.id] },
+        { :prompt => "Select asset" } %>
+    </div>  
+  </div>
+
+  <div class="control-group">
+    <%= f.label :asset_hour_unit, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :asset_hour_unit %>
+    </div>  
+  </div>
+
+  <div class="control-group">
+    <div class="control-label">
+      Asset Amount
+    </div>
+    <div class="controls">
+      <strong><div id="asset_amount"><%= @appointment.amount %></div></strong>
+    </div>  
+  </div>
+
+  <div class="control-group">
+    <%= f.label :status, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :status, [["Pending"], ["Cancelled"], ["Completed"]] %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cancellation_reason_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :cancellation_reason_id, CancellationReason.all.map { |reason| [reason.name, reason.id] }, 
+        { :prompt => "Select reason" }, { :disabled => true } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+      patient_appointments_path(@patient), :class => 'btn' %>
+  </div>
+<% end %>
+
+<div id="suggestions_by_department_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Suggestion for Practitioners</h3>
+  </div>
+  <div id="suggestions_by_department" class="modal-body">
+    <p>Loading please wait ... </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+<div id="suggestions_by_asset_item_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Suggestion for Assets</h3>
+  </div>
+  <div id="suggestions_by_asset_item" class="modal-body">
+    <p>Loading please wait ... </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.onload = function(){ 
+    $("#appointment_from_time").timepicker(); 
+    $("#appointment_to_time").timepicker();
+
+    // suggestions js starts
+    $("#suggestions_by_department_link").click(function(){
+      $.get("/suggestions_by_department", "department_id=" + 
+        $("#appointment_department_id").val(), "js");
+    });
+
+    $("#suggestions_by_asset_item_link").click(function(){
+      $.get("/suggestions_by_asset_item", "asset_item_id=" + 
+        $("#appointment_asset_item_id").val(), "js");
+    });
+    // suggestions js ends
+
+    // hack for on load
+    if($("#appointment_status").val() == "Cancelled"){
+      $("#appointment_cancellation_reason_id").prop('disabled', false);
+    }
+    $("#appointment_status").change(function(){
+      if($(this).val() == "Cancelled"){
+        $("#appointment_cancellation_reason_id").prop('disabled', false);
+      }else{
+        $("#appointment_cancellation_reason_id").prop('disabled', true);
+      }
+    });
+
+    $("#asset_amount").html("<%= @appointment.amount %>");
+
+    function get_appointment_amount(){
+      $.get("/appointment_asset_amount", "asset_item_id=" + $("#appointment_asset_item_id").val() +
+        "&asset_hour_unit=" + $("#appointment_asset_hour_unit").val(), "js");
+    }
+
+    $("#appointment_asset_item_id").change(function(){
+      get_appointment_amount();
+    });
+
+    $("#appointment_asset_hour_unit").change(function(){
+      get_appointment_amount();
+    });
+  };
+</script>

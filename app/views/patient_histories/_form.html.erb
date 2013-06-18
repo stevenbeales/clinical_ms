@@ -1,0 +1,58 @@
+<%= form_for [@patient, @patient_history], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @patient_history %>
+
+  <div class="control-group">
+    <%= f.label :consultant_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :consultant_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :consultant_clinic_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :consultant_clinic_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :consultant_phone_no, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :consultant_phone_no %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :symptoms, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :symptoms, { :rows => 5 } %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :medication, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :medication, { :rows => 5 } %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :from_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :from_date, { "data-behaviour" => "datepicker" } %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :to_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :to_date, { "data-behaviour" => "datepicker" } %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :follow_up, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :follow_up, { :rows => 5 } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                patient_patient_histories_path(@patient), :class => 'btn' %>
+  </div>
+<% end %>

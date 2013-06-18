@@ -1,0 +1,50 @@
+<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie&subset=latin' 
+  rel='stylesheet' type='text/css'>
+
+<%- model_class = PatientHistory -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<ul id="notes" style="list-style: none;">
+  <li>
+    <p class="text-right">
+      <b>Consultant</b>
+      <%= @patient_history.consultant_name %>
+      <br/>
+      <b>Clinic</b>
+      <%= @patient_history.consultant_clinic_name %>
+      <br/>
+      <b>Phone No.</b>
+      <%= @patient_history.consultant_phone_no %>
+    </p>
+    <hr/>
+
+    <p style="font-size: 25px;">
+      <b><%= model_class.human_attribute_name(:symptoms) %></b>
+      <%= @patient_history.symptoms %>
+      <br/>
+      <b><%= model_class.human_attribute_name(:medication) %></b>
+      <%= @patient_history.medication %>
+      <br/>
+      <%= @patient_history.from_date.strftime("%d %B %Y") %>
+       to 
+      <%= @patient_history.to_date.strftime("%d %B %Y") %>
+      <br/>
+      <b><%= model_class.human_attribute_name(:follow_up) %></b>
+      <%= @patient_history.follow_up %>
+    </p>
+  </li>
+</ul>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              patient_patient_histories_path(@patient), :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_patient_patient_history_path(@patient, @patient_history), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              patient_patient_history_path(@patient, @patient_history),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

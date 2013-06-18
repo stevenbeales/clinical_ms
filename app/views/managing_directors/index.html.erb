@@ -1,0 +1,42 @@
+<%- model_class = ManagingDirector -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th><%= model_class.human_attribute_name(:gender) %></th>
+      <th><%= model_class.human_attribute_name(:age) %></th>
+      <th><%= model_class.human_attribute_name(:phone) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @managing_directors.each do |managing_director| %>
+      <tr>
+        <td><%= link_to managing_director.id, managing_director_path(managing_director) %></td>
+        <td><%= managing_director.name %></td>
+        <td><%= managing_director.email %></td>
+        <td><%= managing_director.gender %></td>
+        <td><%= managing_director.age %></td>
+        <td><%= managing_director.phone %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_managing_director_path(managing_director), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      managing_director_path(managing_director),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_managing_director_path,
+            :class => 'btn btn-primary' %>

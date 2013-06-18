@@ -1,0 +1,91 @@
+@charset "utf-8";
+/* CSS Document */
+@media print {
+	body * { float: none !important; }
+	
+	.non-printable {
+		display:none; 
+		visibility:hidden; 
+		height:0;
+		width:0;
+	}
+	
+ 	.printable {
+		display:block; 
+		visibility:visible; 
+	}
+	
+	ul,li {
+		page-break-inside: auto;
+	}
+		
+	.content-body, .content, .section, .row-fluid, .span11, .accordion, .accordion-group, .accordion-inner, .accordion-body {
+		margin:0px;
+		padding:0px;
+		border:0px;
+	}
+	
+	hr, h5 {
+		margin:0;
+		padding:0;  
+	}
+	
+	.accordion-group .accordion-body .accordion-inner h5 {
+		margin:0;
+		padding:0; 
+		font-size:14px;
+		border:0px solid black;
+	}
+	
+	.accordion-group .accordion-body .accordion-inner table {
+		margin:0;
+		padding:0;   
+		border:0px solid black;
+	}
+	
+	.accordion, #persondata tr td {
+		font-size:10px;  
+	}
+		
+	a,
+	a:visited {
+		text-decoration: underline;
+	}
+	a[href]:after {
+		/*content: " (" attr(href) ")";*/
+	}
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+	.ir a:after,
+	a[href^="javascript:"]:after,
+	a[href^="#"]:after {
+		content: "";
+	}
+	pre,
+	blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
+	thead {
+		display: table-header-group;
+	}
+	tr,
+	img {
+		page-break-inside: avoid;
+	}
+	img {
+		max-width: 100% !important;
+	}
+
+	p,
+	h2,
+	h3 {
+		orphans: 3;
+		widows: 3;
+	}
+	h2,
+	h3 {
+		page-break-after: avoid;
+	}
+}

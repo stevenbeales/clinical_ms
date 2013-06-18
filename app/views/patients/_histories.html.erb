@@ -1,0 +1,13 @@
+<div style="background-color: #eee; padding: 5px;">
+	<small>
+		<% unless @histories.empty? %>
+			<ul>
+				<% @histories.each do |history| %>
+					<li class="text-error"><%= history.follow_up %></li>
+				<% end -%>
+			</ul>
+		<% else %>
+			No follow up yet
+		<% end -%>
+	</small>
+</div>

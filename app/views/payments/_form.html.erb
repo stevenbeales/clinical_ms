@@ -1,0 +1,47 @@
+<%= nested_form_for [@user, @payment], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @payment %>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <th>Transaction id</th>
+      <th>Transaction type</th>
+      <th>Amount</th>
+      <th>Discount</th>
+      <th>Discount note</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :payment_items do |f| %>
+        <%= render :partial => "payments/item_fields", :locals => { :f => f } %>
+      <% end -%>      
+    </tbody>
+  </table>
+
+  <div class="control-group">
+    <%= f.label :amount, :class => 'control-label' %>
+    <div class="controls">
+      <b><%= f.object.amount %></b>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :discount, :class => 'control-label' %>
+    <div class="controls">
+      <b><%= f.object.discount %></b>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :paid_amount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :paid_amount, { :class => 'text_field', :autofocus => true } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                patient_payments_path, :class => 'btn' if params[:patient_id] %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                supplier_payments_path, :class => 'btn' if params[:supplier_id] %>
+  </div>
+<% end %>

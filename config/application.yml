@@ -1,0 +1,10 @@
+# config/application.yml
+defaults: &defaults
+  default_password: clinical_ms
+
+development:
+  <<: *defaults
+  per_page:	10
+  minimum_appointment_time: 30.0 # minutes
+  appointment_slot_duration: 1 # days
+  

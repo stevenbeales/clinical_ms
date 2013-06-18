@@ -1,0 +1,50 @@
+<%- model_class = AssetItem -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small>
+      <div class="pull-right">
+        <%= form_tag asset_items_path, :method => :get do %>
+          <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+        <% end -%>
+      </div>
+    </small>
+  </h1>
+</div>
+
+<%= will_paginate @asset_items %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:serial_number) %></th>
+      <th><%= model_class.human_attribute_name(:asset_id) %></th>
+      <th>Appointments</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @asset_items.each do |asset_item| %>
+      <tr>
+        <td><%= link_to asset_item.id, asset_item_path(asset_item) %></td>
+        <td><%= asset_item.serial_number %></td>
+        <td><%= asset_item.asset.name %></td>
+        <% search_text = asset_item.serial_number + " #{params[:search_text] if params[:search_text]}" %>
+        <td><%= link_to "Appointments", appointments_list_path(:search_text => search_text) %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_asset_item_path(asset_item), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      asset_item_path(asset_item),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_asset_item_path,
+            :class => 'btn btn-primary' %>

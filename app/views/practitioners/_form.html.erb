@@ -1,0 +1,29 @@
+<%= nested_form_for @practitioner, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @practitioner %>
+
+  <div class="control-group">
+    <%= f.label :email, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <%= f.fields_for :user_profile do |profile| %>
+    <%= render :partial => "user_profiles/profile_fields", :locals => { :f => profile } %>
+  <% end -%>
+
+  <%= f.fields_for :department_practitioner do |d| %>
+    <div class="control-group">
+      <%= d.label :department_id, :class => 'control-label' %>
+      <div class="controls">
+        <%= d.select :department_id, Department.all.collect { |p| [p.name, p.id] }, { :prompt => "Select department" } %>
+      </div>
+    </div>
+  <% end -%>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                practitioners_path, :class => 'btn' %>
+  </div>
+<% end %>

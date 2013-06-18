@@ -1,0 +1,62 @@
+<% if @clinic.errors.any? %>
+  <div class="error_messages">
+    <h2><%= pluralize(@clinic.errors.count, "error") %> prohibited this clinic from being saved:</h2>
+    <ul>
+    <% @clinic.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_for @clinic, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :phone, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :work_from_time, :class => 'control-label' %>
+    <div class="controls">
+      <div class="input-append bootstrap-timepicker">
+        <%= f.text_field :work_from_time, { :class => "input-small" } %>
+        <span class="add-on"><i class="icon-time"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :work_to_time, :class => 'control-label' %>
+    <div class="controls">
+      <div class="input-append bootstrap-timepicker">
+        <%= f.text_field :work_to_time, { :class => "input-small" } %>
+        <span class="add-on"><i class="icon-time"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :address, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :address, { :rows => 5 } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                clinics_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  window.onload = function(){ 
+    $("#clinic_work_from_time").timepicker(); 
+    $("#clinic_work_to_time").timepicker();
+  };
+</script>

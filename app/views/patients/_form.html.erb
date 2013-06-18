@@ -1,0 +1,43 @@
+<%= nested_form_for @patient, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @patient %>
+
+  <%= f.fields_for :patient_profile do |f| %>
+    <div class="control-group">
+      <%= f.label :uid, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :uid %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :emergency_contact_names, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :emergency_contact_names %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :emergency_contact_nos, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :emergency_contact_nos %>
+      </div>
+    </div>
+  <% end -%>
+
+  <div class="control-group">
+    <%= f.label :email, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <%= f.fields_for :user_profile do |f| %>
+    <%= render :partial => "user_profiles/profile_fields", :locals => { :f => f } %>
+  <% end -%>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                patients_path, :class => 'btn' %>
+  </div>
+<% end %>

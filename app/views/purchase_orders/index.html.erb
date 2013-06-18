@@ -1,0 +1,49 @@
+<%- model_class = PurchaseOrder -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small>
+      <div class="pull-right">
+        <%= form_tag purchase_orders_path, :method => :get do %>
+          <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+        <% end -%>
+      </div>
+    </small>
+  </h1>
+</div>
+
+<%= will_paginate @purchase_orders %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:quantity) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @purchase_orders.each do |purchase_order| %>
+      <tr>
+        <td><%= link_to purchase_order.id, purchase_order_path(purchase_order) %></td>
+        <td><%= purchase_order.quantity %></td>
+        <td><%= purchase_order.amount %></td>
+        <td><%=l purchase_order.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_purchase_order_path(purchase_order), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      purchase_order_path(purchase_order),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_purchase_order_path,
+            :class => 'btn btn-primary' %>

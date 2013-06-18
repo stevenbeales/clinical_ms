@@ -1,0 +1,35 @@
+<%= form_for @asset, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @asset %>
+
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :clinic_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :clinic_id, Clinic.all.map { |c| [c.name, c.id] }, 
+        { :prompt => "Select clinic" } %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :hour_unit, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :hour_unit, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :cost, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :cost, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                assets_path, :class => 'btn' %>
+  </div>
+<% end %>

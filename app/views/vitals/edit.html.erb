@@ -1,0 +1,4 @@
+<div class="page-header">
+  <h1>Edit Vital <small>for <%= @vital.patient.name %>'s Appointment on <%= @vital.appointment.appointment_date.strftime("%d %B %Y") %></h1>
+</div>
+<%= render :partial => 'form' %>

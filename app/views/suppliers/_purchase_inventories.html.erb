@@ -1,0 +1,9 @@
+<tr class="fields">
+  <td>
+    <%= f.select :purchase_inventory_id, 
+      PurchaseInventory.all.map { |pi| [pi.name, pi.id] }, { :prompt => "Select inventory" } %>
+  </td>
+  <td><%= f.select :status, [["In Stock"], ["Out of Stock"]] %></td>
+  <td><%= f.text_field :unit_price %></td>
+  <td><%= f.link_to_remove "Remove", :class => "btn-small btn-primary" %></td>
+</tr>

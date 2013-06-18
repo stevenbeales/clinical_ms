@@ -1,0 +1,37 @@
+<%= nested_form_for @supplier, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render 'shared/error_messages', :resource => @supplier %>
+
+  <div class="control-group">
+    <%= f.label :email, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <%= f.fields_for :user_profile do |f| %>
+    <%= render :partial => "user_profiles/profile_fields", :locals => { :f => f } %>
+  <% end -%>
+
+  <div class="offset1">
+    <table id="inventories">
+      <thead>
+        <th>Inventory</th>
+        <th>Status</th>
+        <th>Unit Price</th>
+      </thead>
+      <tbody>
+        <%= f.fields_for :purchase_inventories_suppliers, :wrapper => false do |f| %>
+          <%= render :partial => "suppliers/purchase_inventories", :locals => { :f => f } %>
+        <% end -%>
+      </tbody>
+    </table>
+    <p><%= f.link_to_add "Add inventory", :purchase_inventories_suppliers,
+      :data => { :target => "#inventories" }, :class => "btn-small btn-primary" %></p>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                suppliers_path, :class => 'btn' %>
+  </div>
+<% end %>

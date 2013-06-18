@@ -1,0 +1,39 @@
+<%- model_class = Payment -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small>
+      <div class="pull-right">
+        <%= form_tag payments_list_path, :method => :get do %>
+          <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+        <% end -%>
+      </div>
+    </small>
+  </h1>
+</div>
+
+<%= will_paginate @payments %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th><%= model_class.human_attribute_name(:discount) %></th>
+      <th><%= model_class.human_attribute_name(:paid_amount) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:created_by) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payments.each do |payment| %>
+      <tr>
+        <td><%= payment.id %></td>
+        <td><%= payment.amount %></td>
+        <td><%= payment.discount %></td>
+        <td><%= payment.paid_amount %></td>
+        <td><%= payment.created_at.strftime("%d %B %Y") %></td>
+        <td><%= payment.creator.name %></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>

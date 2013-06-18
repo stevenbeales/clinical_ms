@@ -1,0 +1,21 @@
+<div id="calendar">
+	<center>
+		<div id="month">
+	    <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m-01") %>
+	    <%= h @date.strftime("%B %Y") %>
+	    <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m-01") %>
+	  </div>
+
+	  <%= calendar_for @appointments, :year => @date.year, :month => @date.month do |calendar| %>
+      <%= calendar.head('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')%>
+	    <% calendar.day(:day_method => :appointment_date) do |date, appointments| %>
+	      <%= date.day %>
+	      <ul>
+		      <% for appointment in appointments %>
+		        <li><%= link_to appointment.from_time, practitioner_appointment_path(current_user, appointment) %></li>
+		      <% end %>
+		    </ul>
+	    <% end %>
+	  <% end %>
+	</center>
+</div>

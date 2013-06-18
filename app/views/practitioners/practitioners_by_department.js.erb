@@ -1,0 +1,1 @@
+$("#appointment_practitioner_id").html('<%= escape_javascript(options_for_select(@practitioners.map {|t| [t.name, t.id]}.unshift(["Select practitioner", ""]), params[:practitioner_id])) %>');

@@ -1,0 +1,23 @@
+<% if @errors %>
+	<p class="text-error"><%= @errors %></a>
+<% else %>
+	<table class="table table-bordered">
+		<thead>
+			<th>Asset</th>
+			<th>Slots Available</th>
+		</thead>
+		<tbody>
+			<% @slots.each do |slot| %> 
+				<tr>
+					<td><%= slot[:asset] %></td>
+					<td>
+						<% slot[:slot_times].each do |slot_time| %>
+							<%= slot_time.strftime("%d %B %Y %H:%M %p") %>
+							<br/>
+						<% end -%>
+					</td>
+				</tr>
+			<% end -%>
+		</tbody>
+	</table>
+<% end -%>

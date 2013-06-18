@@ -1,0 +1,59 @@
+<%- model_class = Appointment -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small> for <%= @user.name %></small>
+  </h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:patient_id) %></th>
+      <th><%= model_class.human_attribute_name(:department_id) %></th>
+      <th><%= model_class.human_attribute_name(:practitioner_id) %></th>
+      <th><%= model_class.human_attribute_name(:appointment_date) %></th>
+      <th><%= model_class.human_attribute_name(:from_time) %></th>
+      <th><%= model_class.human_attribute_name(:to_time) %></th>
+      <th><%= model_class.human_attribute_name(:asset_item_id) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th>Vitals</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @appointments.each do |appointment| %>
+      <tr>
+        <td><%= decorated_status(appointment) %></td>
+        <td><%= link_to appointment.id, patient_appointment_path(:patient_id => appointment.patient_id, :id => appointment.id) %></td>
+        <td><%= appointment.patient.name %></td>
+        <td><%= appointment.department.name %></td>
+        <td><%= appointment.practitioner.name %></td>
+        <td><%= appointment.appointment_date.strftime("%d %B %y") %></td>
+        <td><%= appointment.from_time %></td>
+        <td><%= appointment.to_time %></td>
+        <td><%= appointment.asset_item.decorated_name %></td>
+        <td><%= appointment.amount %></td>
+        <% if appointment.vital %>
+          <td><%= link_to "Vitals", patient_appointment_vital_path(appointment.patient, appointment, appointment.vital) %></td>
+        <% else %>
+          <td><%= link_to "Vitals", new_patient_appointment_vital_path(appointment.patient, appointment) %></td>
+        <% end -%>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_patient_appointment_path(:patient_id => appointment.patient_id, :id => appointment.id), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      patient_appointment_path(:patient_id => appointment.patient_id, :id => appointment.id),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_patient_appointment_path(:patient_id => params[:patient_id]),
+            :class => 'btn btn-primary' if params[:patient_id] %>

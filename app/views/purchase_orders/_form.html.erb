@@ -1,0 +1,92 @@
+<%= nested_form_for @purchase_order, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= render "shared/error_messages", :resource => @purchase_order %>
+  
+  <div>
+    <h4>Select Order items</h4>
+    <table id="items">
+      <thead>
+        <th>Inventory</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+      </thead>
+      <tbody>
+        <%= f.fields_for :purchase_order_items, :wrapper => false do |f| %>
+          <%= render :partial => "purchase_orders/item_fields", :locals => { :f => f } %>
+        <% end -%>
+      </tbody>
+    </table>
+    <p><%= f.link_to_add "Add Item", :purchase_order_items,
+      :data => { :target => "#items" }, :class => "btn-small btn-primary" %></p>
+    <hr/>
+  </div>
+
+  <h4>Final Purchase Order</h4>
+  <div class="control-group offset3">
+    <%= f.label :quantity, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :quantity, { :readonly => true, :class => "input-small" } %>
+    </div>
+  </div>
+
+  <div class="control-group offset3">
+    <%= f.label :amount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :amount, { :readonly => true, :class => "input-small" } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+      purchase_orders_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<%= javascript_tag :defer do %>
+  window.onload = function(){
+    register_quantity_event(".quantity");
+
+    $(document).on('nested:fieldAdded', function(event){
+      register_quantity_event(".quantity");
+    });
+
+    function register_quantity_event(class_id){
+      $(class_id).on('change', function(){
+        var local_id = $(this).parent();
+        if(local_id.attr('class') == 'field_with_errors')
+          local_id = $(this).parent().parent();
+
+        update_inventory_cost(
+          $(local_id).siblings('.inventory_supplier_id').find("select option:selected").val(), 
+          $(this).val(), 
+          $(local_id).siblings().find('.cost')
+        );
+      });
+    }
+
+    function update_inventory_cost(inventory_supplier_id, quantity, target_id){
+      $.get('/cost_for_inventory', "inventory_supplier_id=" + inventory_supplier_id + 
+        "&quantity=" + quantity, 
+        function(data){
+          $(target_id).val(data);
+
+          // update cost and quantity
+          var amount = 0.0;
+          var quantity = 0;
+          $("#items .cost").each(function() {
+            if($(this).val() != "")
+              amount += parseFloat($(this).val());
+          });
+
+          $("#items .quantity").each(function() {
+            if($(this).val() != "")
+              quantity += parseInt($(this).val());
+          });
+
+          $("#purchase_order_amount").val(amount);
+          $("#purchase_order_quantity").val(quantity);
+        }, "json");
+    }
+
+  }
+<% end -%>

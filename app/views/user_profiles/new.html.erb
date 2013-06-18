@@ -1,0 +1,5 @@
+<%- model_class = UserProfile -%>
+<div class="page-header">
+  <h3><%= t '.title', :default => 'Profile', :model => model_class.model_name.human %></h3>
+</div>
+<%= render :partial => 'form' %>

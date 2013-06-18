@@ -1,0 +1,2 @@
+module MedicalRepresentativeNotesHelper
+end

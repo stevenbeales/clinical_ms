@@ -1,0 +1,21 @@
+<small>
+	<% unless @payments.empty? %>
+		<p class="label label-info">Last 5 Payments transactions</p>
+		<table class="table table-condensed" style="background-color: #eee">
+			<thead>
+				<th>Date</th>
+				<th>Amount</th>
+			</thead>
+			<tbody>
+				<% @payments.each do |payment| %>
+				<tr>
+					<td><%= payment.created_at.strftime("%d %B %Y") %></td>
+					<td><%= payment.amount %></td>
+				</tr>
+				<% end -%>
+			</tbody>
+		</table>
+	<% else %>
+		No Payment transactions
+	<% end -%>
+</small>

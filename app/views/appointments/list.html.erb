@@ -1,0 +1,45 @@
+<%- model_class = Appointment -%>
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <small>
+      <div class="pull-right">
+        <%= form_tag appointments_list_path, :method => :get do %>
+          <% text_field_tag :search_text, params[:search_text], :class => "search-query", :placeholder => "Search" %>
+        <% end -%>
+      </div>
+    </small>
+  </h1>
+</div>
+
+<%= will_paginate @appointments %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:patient_id) %></th>
+      <th><%= model_class.human_attribute_name(:department_id) %></th>
+      <th><%= model_class.human_attribute_name(:practitioner_id) %></th>
+      <th><%= model_class.human_attribute_name(:appointment_date) %></th>
+      <th><%= model_class.human_attribute_name(:from_time) %></th>
+      <th><%= model_class.human_attribute_name(:to_time) %></th>
+      <th><%= model_class.human_attribute_name(:asset_item_id) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @appointments.each do |appointment| %>
+      <tr>
+        <td><%= link_to appointment.id, patient_appointment_path(appointment.patient, appointment) %></td>
+        <td><%= decorated_status(appointment) %></td>
+        <td><%= appointment.patient.name %></td>
+        <td><%= appointment.department.name %></td>
+        <td><%= appointment.practitioner.name %></td>
+        <td><%= appointment.appointment_date.strftime("%d %B %Y") %></td>
+        <td><%= appointment.from_time %></td>
+        <td><%= appointment.to_time %></td>
+        <td><%= appointment.asset_item.decorated_name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,61 @@
+<html>
+	<head>
+    <%= stylesheet_link_tag "print", :media => "screen" %>
+	</head>
+	<body>
+		<div id="persondata" class="printable" style="width: 500px; padding: 20px;">
+			<h3>
+				ClinicalMS Receipt
+				<span style="float: right;">
+					<small>Staff : <%= @payment.creator.name %></small>
+				</span>
+			</h3>
+			<hr/>
+
+			<table cellspacing="2" cellpadding="10">
+				<tr>
+					<td><strong>Payment Date</strong></td>
+					<td><%= @payment.created_at.strftime("%d %B %Y") %></td>
+				</tr>
+
+				<tr>
+					<td><strong>Details</strong></td>
+					<td colspan="2">
+						<tbody>
+	            <% @payment.payment_items.each do |item| %>
+	              <tr>
+	                <td><%= item.transaction_type %></td>
+	                <td><%= item.transaction.date.strftime("%d %B %Y") %></td>
+	                <td><%= item.amount - item.discount %></td>
+	              </tr>
+	            <% end -%>
+	          </tbody>
+					</td>
+				</tr>
+
+				<tr>
+					<td><strong>Bill Amount</strong></td>
+					<td><%= @payment.amount %></td>
+				</tr>
+
+				<tr>
+					<td><strong>Discount</strong></td>
+					<td><%= @payment.discount %></td>
+				</tr>
+				
+				<tr>
+					<td><strong>Paid Amount</strong></td>
+			    <td><strong><%= @payment.paid_amount %></strong></td>
+				</tr>
+		  </table>
+
+		  <hr/>
+		  <br/><br/>
+
+		  <div style="float: right;">Authorized signatory</div>
+		  <br/>
+		  <hr/>
+
+		</div>
+	</body>
+</html>

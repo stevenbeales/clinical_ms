@@ -1,0 +1,30 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.icon_div_links {
+	a{
+		text-decoration: none;
+
+		&:hover{
+			text-decoration: none;
+		}
+	}
+	.icon_links{
+		color: rgb(83, 113, 122);
+
+		&:hover{
+			color: rgb(129, 1, 1);
+		}
+
+		div{
+			padding-top: 30px;
+		}
+	}
+
+	.box{
+		padding: 10px; 
+		background-color: rgb(211, 193, 193);
+		margin: 10px;
+	}
+}
