@@ -31,4 +31,3 @@ Setup your own ClincalMS system
 7. Solr powered search engine
 
 and much more ...
-
