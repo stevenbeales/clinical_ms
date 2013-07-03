@@ -32,7 +32,7 @@ end
 group :development, :test do
 	gem 'sunspot_solr'
 	gem 'simplecov', :require => false
-  gem 'rb-readline'
+  gem 'rb-readline', '~> 0.4.2'
   gem 'simplecov-rcov', :require => false
   gem 'rspec-rails', '~> 2.6'
   gem 'spork', '> 0.9.0.rc'
